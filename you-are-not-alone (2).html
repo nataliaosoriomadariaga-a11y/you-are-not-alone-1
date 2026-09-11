@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You Are Not Alone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF4F1;
+    --blush:#F1AFC1;
+    --blush-deep:#E88BA3;
+    --plum:#3D2C3A;
+    --lavender:#C9B6E4;
+    --coral:#F2967D;
+    --card:#FFFFFF;
+    --line:#F3DEE3;
+    --muted:#8B7A85;
+    --pinkbg:#FDEFF3;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    font-family:'Inter',sans-serif;
+    color:var(--plum);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:32px 16px;
+  }
+  .phone{
+    width:380px;
+    height:780px;
+    background:var(--card);
+    border-radius:44px;
+    box-shadow:0 30px 60px rgba(232,139,163,0.25), 0 0 0 10px #2b2029;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+  .notch{
+    position:absolute;
+    top:0; left:50%;
+    transform:translateX(-50%);
+    width:150px; height:26px;
+    background:#2b2029;
+    border-radius:0 0 18px 18px;
+    z-index:10;
+  }
+  .screen{
+    flex:1;
+    overflow-y:auto;
+    padding:52px 24px 20px;
+    display:none;
+    animation:fade .3s ease;
+  }
+  .screen.active{display:block;}
+  .chatscreen{padding:0;}
+  .chatscreen.active{display:flex; flex-direction:column;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:500; margin:0;}
+  p{line-height:1.55; color:var(--muted); margin:8px 0 0;}
+
+  /* ---- Home ---- */
+  .home{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:radial-gradient(circle at 50% 20%, #FCE3EA 0%, var(--cream) 60%);
+  }
+  .mark{
+    width:88px; height:88px;
+    border-radius:50%;
+    background:linear-gradient(160deg, var(--blush), var(--lavender));
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:22px;
+  }
+  .mark svg{width:40px; height:40px;}
+  .home h1{font-size:30px; line-height:1.15; max-width:230px;}
+  .home p{max-width:250px; font-size:15px;}
+  .tag{
+    margin-top:26px;
+    font-size:12px;
+    letter-spacing:.3px;
+    color:var(--blush-deep);
+    font-weight:600;
+  }
+  .btn{
+    margin-top:28px;
+    background:var(--blush-deep);
+    color:#fff;
+    border:none;
+    padding:14px 30px;
+    border-radius:100px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .helpline{
+    margin-top:18px;
+    font-size:11px;
+    color:var(--muted);
+    background:#F7ECEE;
+    padding:8px 14px;
+    border-radius:12px;
+  }
+  .credit{
+    margin-top:14px;
+    font-size:10.5px;
+    color:#C79AAA;
+    font-weight:600;
+    letter-spacing:.2px;
+  }
+
+  /* ---- Header common ---- */
+  .eyebrow{font-size:11px; color:var(--blush-deep); font-weight:600; margin-bottom:6px;}
+  .head{margin-bottom:20px;}
+  .head h2{font-size:22px;}
+  .head p{font-size:14px;}
+
+  /* ---- Form ---- */
+  .qblock{margin-bottom:22px;}
+  .q{font-size:14px; font-weight:600; margin-bottom:10px;}
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    border:1.5px solid var(--line);
+    border-radius:14px;
+    padding:12px 15px;
+    font-size:13.5px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition:border-color .15s, background .15s;
+  }
+  .opt.sel{border-color:var(--blush-deep); background:var(--pinkbg);}
+  .opt .dot{width:16px; height:16px; border-radius:50%; border:1.5px solid var(--line); flex-shrink:0;}
+  .opt.sel .dot{background:var(--blush-deep); border-color:var(--blush-deep);}
+  .continue{width:100%; margin-top:6px; margin-bottom:10px;}
+
+  /* ---- Community ---- */
+  .card{
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:12px;
+    background:#FFFDFC;
+  }
+  .card .row{display:flex; align-items:center; gap:12px;}
+  .avatar{width:42px; height:42px; border-radius:50%; flex-shrink:0;}
+  .a1{background:linear-gradient(160deg,#F1AFC1,#F2967D);}
+  .a2{background:linear-gradient(160deg,#F1AFC1,#C9B6E4);}
+  .a3{background:linear-gradient(160deg,#F2967D,#F1AFC1);}
+  .card .name{font-weight:600; font-size:14px;}
+  .card .meta{font-size:12px; color:var(--muted); margin-top:2px;}
+  .pill{
+    font-size:10px; background:var(--pinkbg); color:var(--blush-deep);
+    padding:3px 9px; border-radius:100px; display:inline-block; margin-top:8px; font-weight:600;
+  }
+  .card p.snippet{font-size:13px; color:var(--plum); margin-top:10px; line-height:1.5;}
+
+  /* ---- Support screen ---- */
+  .chatcard{
+    background:linear-gradient(160deg, var(--pinkbg), #FBF4F1);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px;
+    margin-bottom:22px;
+    cursor:pointer;
+  }
+  .chatcard .row{display:flex; align-items:center; gap:10px;}
+  .bot-avatar{
+    width:36px; height:36px; border-radius:50%;
+    background:linear-gradient(160deg, var(--blush-deep), var(--lavender));
+    flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  }
+  .bot-avatar svg{width:18px; height:18px;}
+  .chat-online{font-size:11px; color:#3F7A5A; font-weight:600;}
+  .chat-online::before{content:"● ";}
+  .chatcard .preview{font-size:12.5px; color:var(--muted); margin-top:10px; line-height:1.5;}
+  .chatbtn{
+    width:100%; background:var(--plum); color:#fff; border:none;
+    padding:12px; border-radius:12px; font-weight:600; font-size:13px; margin-top:12px; cursor:pointer;
+  }
+  .divider{text-align:center; font-size:11px; color:var(--muted); font-weight:600; margin:6px 0 18px; letter-spacing:.3px;}
+  .psy{display:flex; gap:12px; align-items:center; border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:12px;}
+  .psy .avatar{width:50px; height:50px; border-radius:14px;}
+  .psy .info{flex:1;}
+  .psy .info .name{font-weight:600; font-size:14px;}
+  .psy .info .spec{font-size:12px; color:var(--muted);}
+  .free{font-size:10px; font-weight:700; color:#3F7A5A; background:#E4F3EA; padding:3px 8px; border-radius:100px;}
+  .slotbtn{
+    width:100%; background:var(--coral); color:#fff; border:none;
+    padding:11px; border-radius:12px; font-weight:600; font-size:12.5px; margin-top:8px; cursor:pointer;
+  }
+  .confirmed{
+    text-align:center; padding:14px; background:#E4F3EA; border-radius:14px;
+    margin-top:14px; font-size:13px; color:#3F7A5A; font-weight:600; display:none;
+  }
+
+  /* ---- Chat screen ---- */
+  .chat-header{
+    display:flex; align-items:center; gap:10px;
+    padding:52px 20px 14px;
+    border-bottom:1px solid var(--line);
+    background:var(--pinkbg);
+  }
+  .back{background:none; border:none; font-size:18px; color:var(--plum); cursor:pointer; padding:0 4px 0 0;}
+  .chat-title{font-weight:600; font-size:14px;}
+  .chat-messages{flex:1; overflow-y:auto; padding:16px 18px; display:flex; flex-direction:column;}
+  .bubble{
+    background:#fff; border-radius:14px 14px 14px 4px; padding:10px 13px; font-size:13px;
+    max-width:80%; margin-bottom:9px; box-shadow:0 2px 6px rgba(61,44,58,0.05); line-height:1.45;
+  }
+  .bubble.me{background:var(--blush-deep); color:#fff; border-radius:14px 14px 4px 14px; margin-left:auto;}
+  .chat-input-row{
+    display:flex; gap:8px; padding:12px 16px 20px; border-top:1px solid var(--line); background:#fff;
+  }
+  .chat-input-row input{
+    flex:1; border:1.5px solid var(--line); border-radius:100px; padding:11px 16px;
+    font-family:'Inter',sans-serif; font-size:13px; outline:none;
+  }
+  .chat-input-row input:focus{border-color:var(--blush-deep);}
+  .chat-input-row button{
+    width:42px; height:42px; border-radius:50%; border:none; background:var(--blush-deep);
+    color:#fff; font-size:15px; cursor:pointer; flex-shrink:0;
+  }
+
+  /* ---- Tab bar ---- */
+  .tabbar{display:flex; border-top:1px solid var(--line); background:#fff; padding:10px 10px 16px;}
+  .tab{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:none; border:none; cursor:pointer; color:var(--muted);
+    font-family:'Inter',sans-serif; font-size:10px; font-weight:600;
+  }
+  .tab.on{color:var(--blush-deep);}
+  .tab svg{width:20px; height:20px;}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="notch"></div>
+
+  <!-- HOME -->
+  <div class="screen active home" id="s-home">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.3C.3 8 2 4 6 4c2.3 0 3.8 1.3 6 4 2.2-2.7 3.7-4 6-4 4 0 5.7 4 4 7.7C19.5 16.4 12 21 12 21z" fill="#fff"/></svg>
+    </div>
+    <h1>You Are<br>Not Alone</h1>
+    <p>A space where no one faces what they feel by themselves.</p>
+    <div class="tag">CONNECTION · UNDERSTANDING · SUPPORT</div>
+    <button class="btn" onclick="go('form')">Get Started</button>
+    <div class="helpline">In crisis right now? Colombia's Line 106, available 24/7.</div>
+    <div class="credit">By Julián Centanaro &amp; Natalia Osorio</div>
+  </div>
+
+  <!-- FORM -->
+  <div class="screen" id="s-form">
+    <div class="eyebrow">TELL US ABOUT YOU</div>
+    <div class="head">
+      <h2>A few quick questions</h2>
+      <p>Answer once — we'll use this to match you with the right people and support.</p>
+    </div>
+
+    <div class="qblock">
+      <div class="q">1. What have you felt most often lately?</div>
+      <div class="opts">
+        <div class="opt sel" onclick="selOpt(this)"><span>Anxiety</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>Deep sadness / depression</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>Loneliness or feeling misunderstood</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>Academic or family stress</span><span class="dot"></span></div>
+      </div>
+    </div>
+
+    <div class="qblock">
+      <div class="q">2. How long have you felt this way?</div>
+      <div class="opts">
+        <div class="opt sel" onclick="selOpt(this)"><span>Less than a month</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>A few months</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>Over a year</span><span class="dot"></span></div>
+      </div>
+    </div>
+
+    <div class="qblock">
+      <div class="q">3. What kind of support do you want most?</div>
+      <div class="opts">
+        <div class="opt sel" onclick="selOpt(this)"><span>People who understand (peers)</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>A psychologist</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>Both</span><span class="dot"></span></div>
+      </div>
+    </div>
+
+    <div class="qblock">
+      <div class="q">4. How would you rather talk?</div>
+      <div class="opts">
+        <div class="opt sel" onclick="selOpt(this)"><span>Text chat</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>Voice call</span><span class="dot"></span></div>
+        <div class="opt" onclick="selOpt(this)"><span>Video call</span><span class="dot"></span></div>
+      </div>
+    </div>
+
+    <button class="btn continue" onclick="go('community')">See my matches</button>
+  </div>
+
+  <!-- COMMUNITY -->
+  <div class="screen" id="s-community">
+    <div class="eyebrow">YOUR COMMUNITY</div>
+    <div class="head">
+      <h2>People who understand you</h2>
+      <p>Anonymous profiles going through something similar to you.</p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="avatar a1"></div>
+        <div><div class="name">Luna_23</div><div class="meta">Barranquilla · 92% match</div></div>
+      </div>
+      <div class="pill">Anxiety</div>
+      <p class="snippet">"Since I started talking to someone who feels it too, I stopped thinking I was overreacting."</p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="avatar a2"></div>
+        <div><div class="name">Marco_R</div><div class="meta">Bogotá · 87% match</div></div>
+      </div>
+      <div class="pill">Loneliness</div>
+      <p class="snippet">"It helped to know I'm not the only one who feels this way at night."</p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="avatar a3"></div>
+        <div><div class="name">Vale.exe</div><div class="meta">Medellín · 81% match</div></div>
+      </div>
+      <div class="pill">Academic stress</div>
+      <p class="snippet">"I found a group I can actually talk to without explaining everything from scratch."</p>
+    </div>
+  </div>
+
+  <!-- SUPPORT -->
+  <div class="screen" id="s-care">
+    <div class="eyebrow">FREE SUPPORT</div>
+    <div class="head">
+      <h2>You don't have to carry this alone</h2>
+      <p>Chat with our support bot anytime, or book a free session with a psychologist.</p>
+    </div>
+
+    <div class="chatcard" onclick="go('chat')">
+      <div class="row">
+        <div class="bot-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.3C.3 8 2 4 6 4c2.3 0 3.8 1.3 6 4 2.2-2.7 3.7-4 6-4 4 0 5.7 4 4 7.7C19.5 16.4 12 21 12 21z" fill="#fff"/></svg>
+        </div>
+        <div>
+          <div style="font-weight:600; font-size:13.5px;">Alo, your support bot</div>
+          <div class="chat-online">Online now</div>
+        </div>
+      </div>
+      <p class="preview">"Hi, I'm here whenever you need to talk. How are you feeling right now?"</p>
+      <button class="chatbtn" onclick="event.stopPropagation(); go('chat')">Open chat</button>
+    </div>
+
+    <div class="divider">OR BOOK A PSYCHOLOGIST</div>
+
+    <div class="psy">
+      <div class="avatar a1"></div>
+      <div class="info"><div class="name">Dr. Daniela Mesa</div><div class="spec">Anxiety &amp; stress · Mon-Fri</div></div>
+      <span class="free">FREE</span>
+    </div>
+    <div class="psy">
+      <div class="avatar a2"></div>
+      <div class="info"><div class="name">Dr. Andrés Cote</div><div class="spec">Depression · Tue-Sat</div></div>
+      <span class="free">FREE</span>
+    </div>
+    <div class="psy">
+      <div class="avatar a3"></div>
+      <div class="info"><div class="name">Dr. Rocío Pardo</div><div class="spec">Social isolation · Every day</div></div>
+      <span class="free">FREE</span>
+    </div>
+
+    <div id="booking-area">
+      <button class="slotbtn" id="book-btn" onclick="showSlots()">Book next available session</button>
+      <div id="slot-picker" style="display:none;">
+        <div class="q" style="margin-top:14px;">Choose a time</div>
+        <div class="opts">
+          <div class="opt sel" onclick="selOpt(this)"><span>Today · 4:00 PM</span><span class="dot"></span></div>
+          <div class="opt" onclick="selOpt(this)"><span>Tomorrow · 10:00 AM</span><span class="dot"></span></div>
+          <div class="opt" onclick="selOpt(this)"><span>Tomorrow · 3:30 PM</span><span class="dot"></span></div>
+        </div>
+        <button class="btn continue" onclick="confirmBooking()">Confirm booking</button>
+      </div>
+      <div class="confirmed" id="booking-confirmed">✓ Session booked — confirmation sent in-app</div>
+    </div>
+  </div>
+
+  <!-- CHAT -->
+  <div class="screen chatscreen" id="s-chat">
+    <div class="chat-header">
+      <button class="back" onclick="go('care')">←</button>
+      <div class="bot-avatar">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.3C.3 8 2 4 6 4c2.3 0 3.8 1.3 6 4 2.2-2.7 3.7-4 6-4 4 0 5.7 4 4 7.7C19.5 16.4 12 21 12 21z" fill="#fff"/></svg>
+      </div>
+      <div>
+        <div class="chat-title">Alo</div>
+        <div class="chat-online">Online now</div>
+      </div>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="bubble">Hi, I'm here whenever you need to talk. How are you feeling right now? 💗</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tabbar">
+    <button class="tab on" id="t-home" onclick="go('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+      Home
+    </button>
+    <button class="tab" id="t-form" onclick="go('form')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>
+      Form
+    </button>
+    <button class="tab" id="t-community" onclick="go('community')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20v-1c0-2.5 2.5-4 6-4s6 1.5 6 4v1"/></svg>
+      Community
+    </button>
+    <button class="tab" id="t-care" onclick="go('care')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7.5-4.6-10-9.3C.3 8 2 4 6 4c2.3 0 3.8 1.3 6 4 2.2-2.7 3.7-4 6-4 4 0 5.7 4 4 7.7C19.5 16.4 12 21 12 21z"/></svg>
+      Support
+    </button>
+  </div>
+</div>
+
+<script>
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  const tab = document.getElementById('t-'+name);
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  if(name==='chat'){ document.getElementById('t-care').classList.add('on'); }
+  else if(tab){ tab.classList.add('on'); }
+}
+function selOpt(el){
+  el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function showSlots(){
+  document.getElementById('book-btn').style.display='none';
+  document.getElementById('slot-picker').style.display='block';
+}
+function confirmBooking(){
+  document.getElementById('slot-picker').style.display='none';
+  document.getElementById('booking-confirmed').style.display='block';
+}
+
+/* ---- Working rule-based chatbot ---- */
+const botReplies = [
+  {k:['suicid','kill myself','end my life','hurt myself','self-harm','harm myself'], r:"I'm really glad you told me. Please reach out right now to Line 106 (Colombia) or a trusted adult near you — you deserve support beyond this chat."},
+  {k:['sad','depress','down','cry'], r:"That sounds really heavy. You don't have to carry it alone — want to talk about what's going on, or would a psychologist session help more?"},
+  {k:['anxious','anxiety','nervous','panic'], r:"Anxiety can feel overwhelming. Try breathing in for 4 counts, hold 4, out 4 — I'm right here with you while you do it."},
+  {k:['alone','lonely','isolat'], r:"You're not alone right now — I'm here, and there are people in the Community tab going through something similar."},
+  {k:['stress','overwhelm','exam','school'], r:"That's a lot to carry at once. What feels the most urgent right now — can we break it into one small step?"},
+  {k:['thank','thanks'], r:"Anytime. I'm here whenever you need me 💗"},
+  {k:['hi','hello','hey'], r:"Hi! I'm Alo. How are you feeling today?"}
+];
+function botReply(text){
+  const t = text.toLowerCase();
+  for(const item of botReplies){
+    if(item.k.some(k=>t.includes(k))) return item.r;
+  }
+  return "Thank you for sharing that. Want a few grounding tips, or would you rather book time with a psychologist?";
+}
+function addBubble(text, me){
+  const c = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'bubble' + (me ? ' me' : '');
+  div.textContent = text;
+  c.appendChild(div);
+  c.scrollTop = c.scrollHeight;
+}
+function sendChat(){
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if(!text) return;
+  addBubble(text, true);
+  input.value = '';
+  setTimeout(()=>{ addBubble(botReply(text), false); }, 450);
+}
+</script>
+
+</body>
+</html>
